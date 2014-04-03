@@ -88,6 +88,7 @@ class Sortable_Table_Admin {
          */
         // add_action( '@TODO', array( $this, 'action_method_name' ) );
         add_action( 'admin_post_action_save_data', array( $this, 'action_save_data' ) );
+        add_action( 'admin_post_action_delete_data', array( $this, 'action_delete_data' ) );
         // add_filter( '@TODO', array( $this, 'filter_method_name' ) );
 
     }
@@ -238,10 +239,9 @@ class Sortable_Table_Admin {
     }
     
     public function action_save_data() {
-        global $wpdb;
-        $table = $wpdb->prefix . 'sortable_table';
-
         function save($decodedJSON) {
+            global $wpdb;
+            $table = $wpdb->prefix . 'sortable_table';
             $format = array('%s', '%s');
 
             foreach ($decodedJSON as $key => $site) {
@@ -256,6 +256,24 @@ class Sortable_Table_Admin {
         $json = stripslashes($_POST['sites']);
         $json = utf8_encode($json);
         save(json_decode($json));
+    }
+
+    public function action_delete_data() {
+        function delete($site) {
+            global $wpdb;
+            $table = $wpdb->prefix . 'sortable_table';
+
+            // $sql = $wpdb->prepare("DELETE FROM tracking WHERE user_ip = %s ", '168.211.23.43');
+
+            $sql = $wpdb->prepare('DELETE FROM ' . $table . ' WHERE id = %d ', $site->id);
+            $wpdb->query($sql);
+        }
+
+        ChromePhp::log(1, 'action_delete_data');
+
+        $json = stripslashes($_POST['site']);
+        $json = utf8_encode($json);
+        delete(json_decode($json));
     }
 
     /**

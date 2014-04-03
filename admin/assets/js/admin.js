@@ -111,7 +111,7 @@
                     getSitesData = function() {
                         var sites = [];
 
-                        elements.table.find('tbody tr').each(function() {
+                        elements.table.find('tbody tr.site--new').each(function() {
                             var
                                 $this = $(this),
                                 name = $this.find('.site-name').text(),
@@ -173,7 +173,9 @@
 
             addSite = function() {
                 var
-                    $newRow = $('<tr>'),
+                    $newRow = $('<tr>', {
+                        'class': 'site site--new'
+                    }),
                     $checkbox,
                     $name = $('<td>', {
                         'class': 'site-name',
@@ -220,9 +222,26 @@
             },
 
             deleteSite = function() {
-                var $this = $(this);
+                var
+                    $site = $(this).parents('tr.site'),
+                    data = {
+                        action: 'action_delete_data'
+                    },
+                    site = {
+                        id: $site.data('id'),
+                        name: $site.find('.site-name').text(),
+                        url: $site.find('.site-url').text()
+                    };
 
-                $(this).parents('tr').remove();
+                data.site = JSON.stringify(site);
+
+                $.ajax({
+                    url: 'admin-post.php',
+                    type: 'POST',
+                    data: $.param(data)
+                });
+
+                $site.remove();
                 update();
             },
 
@@ -230,7 +249,7 @@
                 var $selected = elements.checkbox.filter(':checked');
 
                 $selected.each(function() {
-                    $(this).parents('tr').remove();
+                    deleteSite.call(this);
                 });
             },
 

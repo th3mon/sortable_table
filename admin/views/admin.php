@@ -11,6 +11,10 @@
  * @link      http://example.com
  * @copyright 2013 Your Name or Company Name
  */
+
+$sites = Sortable_Table_Admin::get_instance()->getSites();
+$html = '';
+
 ?>
 
 <div class="wrap" id="Sortable_Table">
@@ -19,7 +23,6 @@
         <input type="hidden" name="action" value="action_save_data">
         <!-- <input type="hidden" name="page" value="sortable-table"> -->
         <h2><?php echo esc_html( get_admin_page_title() ); ?></h2>
-        <pre><?php var_dump(Sortable_Table_Admin::get_instance()->getSites()); ?></pre>
         
         <!-- @TODO: Provide markup for your options page here. -->
         
@@ -40,12 +43,18 @@
                 </tr>
             </thead>
             <tbody>
-                <tr>
-                    <td><input type="checkbox" id="checkbox-1"></td>
-                    <td class="site-name">google</td>
-                    <td class="site-url"><a href="http://google.pl/">http://google.pl/</a></td>
-                    <td><input type="button" class="button-delete" id="button-delete-1" name="button-delete-1" value="delete"></td>
-                </tr>
+                <?php
+                    foreach ($sites as $key => $site) {
+                        $html .= '<tr class="site" data-id="' . $site->id . '">';
+                        $html .= '<td><input type="checkbox" id="checkbox-' . $site->id . '"></td>';
+                        $html .= '<td class="site-name">' . $site->site_name . '</td>';
+                        $html .= '<td class="site-url"><a href="' . $site->url . '">' . $site->url . '</a></td>';
+                        $html .= '<td><input type="button" class="button-delete" id="button-delete-' . $site->id . '" name="button-delete-' . $site->id . '" value="delete"></td>';
+                        $html .= '</tr>';
+                    }
+
+                    echo $html;
+                ?>
             </tbody>
             <tfoot>
                 <tr>
