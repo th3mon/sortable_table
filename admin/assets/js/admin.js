@@ -121,6 +121,8 @@
                                 name: name,
                                 url: url
                             });
+
+                            $this.removeClass('site--new');
                         });
 
                         return sites;
@@ -132,6 +134,8 @@
                     url: 'admin-post.php',
                     type: 'POST',
                     data: $.param(data)
+                }).then(function(data) {
+                    console.dir(JSON.parse(data));
                 });
             },
 
@@ -239,6 +243,8 @@
                     url: 'admin-post.php',
                     type: 'POST',
                     data: $.param(data)
+                }).then(function(data) {
+                    console.log(data);
                 });
 
                 $site.remove();

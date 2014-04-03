@@ -245,10 +245,12 @@ class Sortable_Table_Admin {
             $format = array('%s', '%s');
 
             foreach ($decodedJSON as $key => $site) {
-                ChromePhp::log(4, $site->name, $site->url);
                 $data = array('site_name' => $site->name, 'url' => $site->url);
                 $wpdb->insert($table, $data, $format);
+                $json = '{"name": "' . $site->name . '", "url": "' . $site->url . '"}';
             }
+
+            echo $json;
         }
 
         ChromePhp::log(0, 'action_save_data');
@@ -263,10 +265,10 @@ class Sortable_Table_Admin {
             global $wpdb;
             $table = $wpdb->prefix . 'sortable_table';
 
-            // $sql = $wpdb->prepare("DELETE FROM tracking WHERE user_ip = %s ", '168.211.23.43');
-
             $sql = $wpdb->prepare('DELETE FROM ' . $table . ' WHERE id = %d ', $site->id);
             $wpdb->query($sql);
+
+            echo json_encode($site);
         }
 
         ChromePhp::log(1, 'action_delete_data');
