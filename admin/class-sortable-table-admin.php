@@ -162,8 +162,11 @@ class Sortable_Table_Admin {
 
         $screen = get_current_screen();
         if ( $this->plugin_screen_hook_suffix == $screen->id ) {
-            wp_enqueue_script( 'lo-dash', plugins_url( '../assets/js/lodash.compat.js', __FILE__ ) );
-            wp_enqueue_script( 'polyfills', plugins_url( '../assets/js/polyfills.js', __FILE__ ) );
+            $assetsUrl = plugins_url( '/', __FILE__ );
+            $assetsUrl .= '../assets/js/';
+
+            wp_enqueue_script( 'lo-dash', $assetsUrl . 'lodash.compat.js' );
+            wp_enqueue_script( 'polyfills', $assetsUrl .'polyfills.js' );
             wp_enqueue_script( $this->plugin_slug . '-admin-script', plugins_url( 'assets/js/admin.js', __FILE__ ), array( 'jquery', 'lo-dash' ), Sortable_Table::VERSION );
         }
 
